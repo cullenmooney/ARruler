@@ -11,6 +11,9 @@ import SceneKit
 import ARKit
 
 class ViewController: UIViewController, ARSCNViewDelegate {
+    
+    // an array of all the dot nodes we put onto the scene
+    var dotNodes = [SCNNode]()
 
     @IBOutlet var sceneView: ARSCNView!
     
@@ -61,5 +64,32 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         dotNode.position = SCNVector3(hitResult.worldTransform.columns.3.x, hitResult.worldTransform.columns.3.y, hitResult.worldTransform.columns.3.z)
         
         sceneView.scene.rootNode.addChildNode(dotNode)
+        
+        dotNodes.append(dotNode)
+        
+        if dotNodes.count >= 2 {
+            calculate()
+        }
+    }
+    
+    func calculate() {
+        let start = dotNodes[0]
+        let end = dotNodes[1]
+        
+        print(start.position)
+        print(end.position)
+        
+        let a = end.position.x - start.position.x
+        let b = end.position.y - start.position.y
+        let c = end.position.z - start.position.z
+        
+        let distance = sqrt(pow(a, 2) + pow(b, 2) + pow(c, 2))
+        
+        let distanceCM = distance * 100
+        let distanceInch = distanceCM * 0.3937007874
+        print(distanceInch)
+        
+        
+        //distance = √ ((x2-x1)^2 + (y2-y1)^2 + (z2-z1)^2)
     }
 }
