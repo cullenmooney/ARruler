@@ -87,9 +87,20 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         let distanceCM = distance * 100
         let distanceInch = distanceCM * 0.3937007874
-        print(distanceInch)
+        let distanceInchRounded = round(1000.0 * distanceInch) / 1000
+        print(distanceInchRounded)
         
+        updateText(text: "\(distanceInchRounded)in", atPosition: end.position)
+    }
+    
+    func updateText(text: String, atPosition position: SCNVector3) {
+        let textGeometry = SCNText(string: text, extrusionDepth: 1.0)
+        textGeometry.firstMaterial?.diffuse.contents = UIColor.red
         
-        //distance = √ ((x2-x1)^2 + (y2-y1)^2 + (z2-z1)^2)
+        let textNode = SCNNode(geometry: textGeometry)
+        textNode.position = SCNVector3(position.x, position.y + 0.01, position.z)
+        textNode.scale = SCNVector3(0.01, 0.01, 0.01)
+        
+        sceneView.scene.rootNode.addChildNode(textNode)
     }
 }
